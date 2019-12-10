@@ -1,0 +1,59 @@
+package com.match;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ *
+ * @author niran
+ */
+public class SimpleMarketPlaceProblem {
+    
+    public static void main(String args[]) 
+    {
+        List<Orders> buyOrders = new ArrayList<Orders>();
+        buyOrders.add(new Orders("john",100));
+        buyOrders.add(new Orders("jack",200));
+        buyOrders.add(new Orders("Raj",50));
+        buyOrders.add(new Orders("pp",80));
+        Collections.sort(buyOrders,Collections.reverseOrder());
+        
+        List<Orders> sellOrders = new ArrayList<Orders>();
+        sellOrders.add(new Orders("Rahul",50));
+        sellOrders.add(new Orders("PD",80));
+        sellOrders.add(new Orders("Jill",250));
+        sellOrders.add(new Orders("jeff",200));
+        Collections.sort(sellOrders);
+        List<Orders> totalList = new ArrayList<Orders>(buyOrders);
+        totalList.addAll(sellOrders);
+
+        Map<Orders,Orders> mapping = new HashMap<Orders,Orders>();
+        
+        for(Orders sellOrder: sellOrders){
+            for(Orders buyOrder : buyOrders){
+                if(buyOrder.getPrice() > sellOrder.getPrice()){
+                     mapping.put(sellOrder,buyOrder);
+                     
+                }
+                else if(buyOrder.getPrice().equals(sellOrder.getPrice())){
+                    if(!mapping.containsKey(sellOrder)){
+                        mapping.put(sellOrder,buyOrder);
+                    }
+                }
+               
+            }
+        }
+        if(!mapping.isEmpty())
+        {
+        	mapping.forEach((k,v)->System.out.println(k.getName()+" - "+v.getName()));
+        }
+        for(Orders order : totalList) {
+        	if(!(mapping.containsKey(order)||mapping.containsValue(order))){
+        		System.out.println("unMapped  "+order.getName());
+        	}
+        }
+       
+    }
+}
